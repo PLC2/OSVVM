@@ -1,5 +1,5 @@
-Open Source VHDL Verification Methodology (OSVVM)
-#################################################
+Open Source VHDL Verification Methodology
+#########################################
 
 Open Source VHDL Verification Methodology (OSVVM) is an intelligent testbench
 methodology that allows mixing of “Intelligent Coverage” (coverage driven
@@ -24,13 +24,19 @@ accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea taki
 .. toctree::
    :hidden:
     
+   QuickStart
+   FunctionalCoverage
+   UserGuides/index
+   References/index
+   License
+   GetInvolved
+   AboutMe
+
+.. This is a multiline Comment
    AlertLogPkg
    CoveragePkg
    MemoryPkg
    OsvvmGlobalPkg
    RandomPkg
    TranscriptPkg
-   License
-	 ReleaseNotes
-   GetInvolved
-   AboutMe
+	 
