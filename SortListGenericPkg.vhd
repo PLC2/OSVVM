@@ -1,7 +1,7 @@
 --
---  File Name:         SortListPkg_int.vhd
---  Design Unit Name:  SortListPkg_int
---  Revision:          STANDARD VERSION
+--  File Name:         SortListGenericPkg.vhd
+--  Design Unit Name:  SortListGenericPkg
+--  Revision:          STANDARD VERSION,  revision 2015.01
 --
 --  Maintainer:        Jim Lewis      email:  jim@synthworks.com
 --  Contributor(s):
@@ -32,11 +32,10 @@
 --                          Deleted extra variable declaration in procedure remove
 --    1/2014     2014.01    Added RevSort.  Added AllowDuplicate paramter to Add procedure
 --    1/2015     2015.01    Changed Assert/Report to Alert
---    11/2016    2016.11    Revised Add.  When AllowDuplicate, add a matching value last.
 --
 --
 --
---  Copyright (c) 2008 - 2016 by SynthWorks Design Inc.  All rights reserved.
+--  Copyright (c) 2008 - 2015 by SynthWorks Design Inc.  All rights reserved.
 --
 --  Verbatim copies of this source file may be used and
 --  distributed without restriction.
@@ -60,19 +59,20 @@ use work.OsvvmGlobalPkg.all ;
 use work.AlertLogPkg.all ; 
 use std.textio.all ;
 
--- comment out following 2 lines with VHDL-2008.  Leave in for VHDL-2002 
--- library ieee_proposed ;						          -- remove with VHDL-2008
--- use ieee_proposed.standard_additions.all ;   -- remove with VHDL-2008
 
+package SortListGenericPkg is
+	generic (
+		type ElementType;
+		function "<"(L : ElementType; R : ElementType) return boolean;
+		function "<="(L : ElementType; R : ElementType) return boolean;
+		function ">="(L : ElementType; R : ElementType) return boolean;
+		function to_string(E : ElementType) return string;
+		element_left : ElementType
+	);
 
-package SortListPkg_int is
-  -- with VHDL-2008, convert package to generic package
-  -- convert subtypes ElementType and ArrayofElementType to generics
-  -- package SortListGenericPkg is
-  subtype ElementType is integer ;
-  subtype ArrayofElementType is integer_vector ;
-
-  impure function inside (constant E : ElementType; constant A : in ArrayofElementType) return boolean ;
+	type ArrayofElementType is array (natural range <>) of ElementType;
+	
+  function inside (constant E : ElementType; constant A : in ArrayofElementType) return boolean ;
   impure function sort (constant A : in ArrayofElementType) return ArrayofElementType ;
   impure function revsort (constant A : in ArrayofElementType) return ArrayofElementType ;
 
@@ -99,24 +99,13 @@ package SortListPkg_int is
     impure function to_rev_array (constant EraseList : boolean := FALSE) return ArrayofElementType ;
   end protected SortListPType ;
 
-end SortListPkg_int ;
+end SortListGenericPkg ;
 
 --- ///////////////////////////////////////////////////////////////////////////
 --- ///////////////////////////////////////////////////////////////////////////
 --- ///////////////////////////////////////////////////////////////////////////
 
-package body SortListPkg_int is
-
-  impure function inside (constant E : ElementType; constant A : in ArrayofElementType) return boolean is
-  begin
-    for i in A'range loop
-      if E = A(i) then
-        return TRUE ;
-      end if ;
-    end loop ;
-    return FALSE ;
-  end function inside ;
-  
+package body SortListGenericPkg is
   type SortListPType is protected body
     type ListType ;
     type ListPointerType is access ListType ;
@@ -148,10 +137,9 @@ package body SortListPkg_int is
           exit AddLoop when CurPtr.NextPtr = NULL ;
           exit AddLoop when A < CurPtr.NextPtr.A  ;
           if A = CurPtr.NextPtr.A then 
---            if AllowDuplicate then  -- changed s.t. insert at after match rather than before
---              exit AddLoop ;    -- insert 
---            else
-            if not AllowDuplicate then 
+            if AllowDuplicate then 
+              exit AddLoop ;    -- insert 
+            else
               return ;  -- return without insert
             end if; 
           end if ; 
@@ -170,6 +158,7 @@ package body SortListPkg_int is
     end procedure add ;
 
     procedure add ( constant A : in ArrayofElementType ; Min, Max : ElementType ) is
+			variable AA : ElementType;
     begin
       for i in A'range loop
         if A(i) >= Min and A(i) <= Max then
@@ -267,10 +256,10 @@ package body SortListPkg_int is
       variable CurPtr : ListPointerType ;
     begin
       if index > Count then
-        Alert(OSVVM_ALERTLOG_ID, "SortLIstPkg_int.get index out of range", FAILURE) ;
-        return ElementType'left ;
+        Alert(OSVVM_ALERTLOG_ID, "SortListGenericPkg.get index (" & integer'image(index) & ") out of range", FAILURE) ;
+        return element_left; -- ElementType'left ;
       elsif HeadPointer = NULL then
-        return ElementType'left ;
+        return element_left; -- ElementType'left ;
       elsif index <= 1 then
         return HeadPointer.A ;
       else
@@ -315,7 +304,7 @@ package body SortListPkg_int is
         CurPtr := HeadPointer ;
         write (buf, string'("(")) ;
         loop
-          write (buf, CurPtr.A) ;
+          write (buf, to_string(CurPtr.A)) ;
           exit when CurPtr.NextPtr = NULL ;
           write (buf, string'(", ")) ;
           CurPtr := CurPtr.NextPtr ;
@@ -388,8 +377,17 @@ package body SortListPkg_int is
       return result ;
     end function to_rev_array ;
 
-    end protected body SortListPType ;
+  end protected body SortListPType ;
  
+  function inside (constant E : ElementType; constant A : in ArrayofElementType) return boolean is
+  begin
+    for i in A'range loop
+      if E = A(i) then
+        return TRUE ;
+      end if ;
+    end loop ;
+    return FALSE ;
+  end function inside ;
  
   impure function sort (constant A : in ArrayofElementType) return ArrayofElementType is
     variable Result : SortListPType ;
@@ -408,5 +406,4 @@ package body SortListPkg_int is
     end loop ;
     return Result.to_rev_array(EraseList => TRUE)  ; 
   end function revsort ;
-end SortListPkg_int ;
-
+end SortListGenericPkg ;
