@@ -345,7 +345,7 @@ Added RemoveSpace, RermoveCrLf, GetLine to support file compares.
 - Moved the different versions of IfElse function into this package
 
 ### OsvvmScriptSettingsPkg.vhd 2024.03
-- Added OSVVM_SETTINGS_REVISION and OSVVM_RAW_OUTPUT_DIRECTORY
+- Added OSVVM_SETTINGS_REVISION and OSVVM_TEMP_OUTPUT_DIRECTORY
 
 ### OsvvmSettingsPkg.vhd and OsvvmSettingsPkg_default.vhd  2024.03
 - Updated with settings for 2024

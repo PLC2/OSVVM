@@ -40,7 +40,7 @@
 --                         Added AffirmIfTranscriptsMatch
 --    07/2023   2023.07    Added WriteRequirementsYaml.
 --    04/2023   2023.04    Added GetTranscriptName.
---    01/2023   2023.01    OSVVM_RAW_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY.
+--    01/2023   2023.01    OSVVM_TEMP_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY.
 --    11/2022   2022.11    Added GetTestName
 --    06/2022   2022.06    Added Output Formatting - WriteTimeLast (vs First)
 --                         Minor printing updates to AffirmIfDiff and AlertIfDiff
@@ -1297,7 +1297,7 @@ package body AlertLogPkg is
               FileName        => OSVVM_BUILD_YAML_FILE
             ) ;
             WriteAlertYaml (
-              FileName        => OSVVM_RAW_OUTPUT_DIRECTORY &  GetTestName & "_alerts.yml"
+              FileName        => OSVVM_TEMP_OUTPUT_DIRECTORY &  GetTestName & "_alerts.yml"
             ) ;
           end if ;
           TranscriptClose ;  -- Close Transcript if open
@@ -5841,7 +5841,7 @@ package body AlertLogPkg is
   ------------------------------------------------------------
   begin
     -- synthesis translate_off
-    AffirmIfFilesMatch(AlertLogID, OSVVM_RAW_OUTPUT_DIRECTORY & GetTranscriptName, PathToValidatedResults & '/' & GetTranscriptName, Message, Enable, IgnoreSpaces, IgnoreEmptyLines ) ;
+    AffirmIfFilesMatch(AlertLogID, OSVVM_TEMP_OUTPUT_DIRECTORY & GetTranscriptName, PathToValidatedResults & '/' & GetTranscriptName, Message, Enable, IgnoreSpaces, IgnoreEmptyLines ) ;
     -- synthesis translate_on
   end procedure AffirmIfTranscriptsMatch ;
 
@@ -5850,7 +5850,7 @@ package body AlertLogPkg is
   ------------------------------------------------------------
   begin
     -- synthesis translate_off
-    AffirmIfFilesMatch(ALERT_DEFAULT_ID, OSVVM_RAW_OUTPUT_DIRECTORY & GetTranscriptName, PathToValidatedResults & '/' & GetTranscriptName, Message, Enable, IgnoreSpaces, IgnoreEmptyLines ) ;
+    AffirmIfFilesMatch(ALERT_DEFAULT_ID, OSVVM_TEMP_OUTPUT_DIRECTORY & GetTranscriptName, PathToValidatedResults & '/' & GetTranscriptName, Message, Enable, IgnoreSpaces, IgnoreEmptyLines ) ;
     -- synthesis translate_on
   end procedure AffirmIfTranscriptsMatch ;
 

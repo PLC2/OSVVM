@@ -25,7 +25,7 @@
 --    07/2024   2024.07    Made function generics impure. Added IsInitialized.  Updated Yaml.  
 --    05/2023   2023.05    Updated Pop fail on empty error to print tag if a tag is used
 --    02/2023   2023.04    Bug fix for Peek with a tag.
---    01/2023   2023.01    OSVVM_RAW_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY 
+--    01/2023   2023.01    OSVVM_TEMP_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY 
 --    11/2022   2022.11    Updated default search to PRIVATE_NAME
 --    10/2022   2022.10    Added Parent Name to YAML output.
 --    09/2022   2022.09    Added FifoCount to YAML output.
@@ -2331,8 +2331,8 @@ package body ScoreboardGenericPkg is
     ------------------------------------------------------------
     procedure WriteScoreboardYaml (FileName : string; OpenKind : File_Open_Kind; FileNameIsBaseName : boolean) is
     ------------------------------------------------------------
-      constant RESOLVED_FILE_NAME : string := IfElse(FileName = "", OSVVM_RAW_OUTPUT_DIRECTORY & GetTestName & "_sb.yml", 
-                                              IfElse(FileNameIsBaseName, OSVVM_RAW_OUTPUT_DIRECTORY & GetTestName & "_sb_" & FileName &".yml",FileName) ) ;
+      constant RESOLVED_FILE_NAME : string := IfElse(FileName = "", OSVVM_TEMP_OUTPUT_DIRECTORY & GetTestName & "_sb.yml", 
+                                              IfElse(FileNameIsBaseName, OSVVM_TEMP_OUTPUT_DIRECTORY & GetTestName & "_sb_" & FileName &".yml",FileName) ) ;
 --x      file SbYamlFile : text open OpenKind is RESOLVED_FILE_NAME ;
       file SbYamlFile : text ;
       variable buf : line ;

@@ -32,7 +32,7 @@
 --    03/2024   2024.03    Default values for settings are now constants in OsvvmSettingsPkg. 
 --                         Allows setting constants for all tests rather than using SetReportOptions.  
 --    05/2023   2023.05    Updated InitSeed call in NewID to ensure a unique seed 
---    01/2023   2023.01    OSVVM_RAW_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY 
+--    01/2023   2023.01    OSVVM_TEMP_OUTPUT_DIRECTORY replaced REPORTS_DIRECTORY 
 --    11/2022   2022.11    Updated default search to PRIVATE_NAME
 --    06/2022   2022.06    Add AlertIfNotCovered.  Settings for YAML output.
 --    02/2022   2022.02    Updated NewID with ParentID, ReportMode, Search, PrintParent.
@@ -5418,7 +5418,7 @@ package body CoveragePkg is
     ------------------------------------------------------------
     procedure WriteCovYaml (FileName : string := ""; Coverage : real ; OpenKind : File_Open_Kind := WRITE_MODE) is
     ------------------------------------------------------------
-      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_RAW_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
+      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_TEMP_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
 --x      file CovYamlFile : text open OpenKind is RESOLVED_FILE_NAME ;
       file CovYamlFile : text ;
       variable buf : line ;
@@ -6018,7 +6018,7 @@ package body CoveragePkg is
     ------------------------------------------------------------
     procedure ReadCovYaml (variable ID : inout CoverageIDType; FileName : string := ""; Merge : boolean := FALSE) is
     ------------------------------------------------------------
-      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_RAW_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
+      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_TEMP_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
       file CovYamlFile : text ;
       variable Found   : boolean ;
     begin
@@ -6030,7 +6030,7 @@ package body CoveragePkg is
     ------------------------------------------------------------
     procedure ReadCovYaml  (FileName : string := ""; Merge : boolean := FALSE) is
     ------------------------------------------------------------
-      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_RAW_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
+      constant RESOLVED_FILE_NAME : string := ifelse(FileName = "", OSVVM_TEMP_OUTPUT_DIRECTORY & GetTestName & "_cov.yml", FileName) ;
       file CovYamlFile : text ;
       variable buf     : line ;
       variable Found   : boolean ;
